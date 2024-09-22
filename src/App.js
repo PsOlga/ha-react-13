@@ -1,25 +1,27 @@
-import logo from './logo.svg';
+import Filter from './components/Filter';
+import UserList from './components/UserList';
 import './App.css';
+import { connect } from "react-redux";
+import setFilter from "./redux/actions";
 
-function App() {
+function App({users, filter, setFilter}) {
+
+const handleFilterChange = (newFilter) => {
+setFilter(newFilter)
+};
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <Filter filter={filter} onFilterChange={handleFilterChange}/>
+     <UserList users={users} filter={filter}/>
     </div>
   );
 }
-
-export default App;
+const mapStateToProps = (state) => ({
+  users: state.users,
+  filter: state.filter,
+})
+const mapDispatchToProps = {
+  setFilter: setFilter,
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App);
